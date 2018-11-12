@@ -215,6 +215,7 @@ public abstract class PopupMenuHelper implements PopupMenu.OnMenuItemClickListen
                         FragmentMenuItems.ADD_TO_PLAYLIST,
                         FragmentMenuItems.MORE_BY_ARTIST,
                         FragmentMenuItems.USE_AS_RINGTONE,
+                        FragmentMenuItems.EDIT_METADATA,
                         FragmentMenuItems.DELETE,
                 };
             case Playlist:
@@ -309,6 +310,8 @@ public abstract class PopupMenuHelper implements PopupMenu.OnMenuItemClickListen
                 return R.string.context_menu_play_album;
             case FragmentMenuItems.CHANGE_IMAGE:
                 return R.string.context_menu_change_image;
+            case FragmentMenuItems.EDIT_METADATA:
+                return R.string.context_menu_edit_metadata;
         }
 
         return 0;
@@ -384,6 +387,9 @@ public abstract class PopupMenuHelper implements PopupMenu.OnMenuItemClickListen
                     return true;
                 case FragmentMenuItems.PLAY_NEXT:
                     playNext();
+                    return true;
+                case FragmentMenuItems.EDIT_METADATA:
+                    NavUtils.openMetadataEditor(mActivity, getId());
                     return true;
                 case FragmentMenuItems.PLAY_ALBUM:
                     playAlbum();
