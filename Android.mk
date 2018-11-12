@@ -11,7 +11,10 @@ LOCAL_RESOURCE_DIR := $(addprefix $(LOCAL_PATH)/, res)
 
 LOCAL_STATIC_JAVA_LIBRARIES := \
     android-support-v8-renderscript \
-    android-common
+    android-common \
+    guava \
+    junit \
+    eleven_jaudiotagger
 
 LOCAL_STATIC_ANDROID_LIBRARIES := \
     android-support-v4 \
@@ -41,4 +44,9 @@ endif
 include $(BUILD_PACKAGE)
 
 include $(CLEAR_VARS)
+
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := \
+    eleven_jaudiotagger:libs/jaudiotagger-2.2.6-SNAPSHOT.jar
+
+
 include $(BUILD_MULTI_PREBUILT)

@@ -35,6 +35,7 @@ public interface FragmentMenuItems {
     int NEW_PLAYLIST        = 130; // create new playlist - also in res/menu!
     int PLAYLIST_SELECTED   = 140; // this is used for existing playlists
     int CHANGE_IMAGE        = 150; // set new art for artist/album
+    int EDIT_METADATA		= 160; // edit mp3 id tags
 
     // not currently in use
     int FETCH_ARTIST_IMAGE  = 200;

@@ -93,6 +93,7 @@
     <string name="context_menu_use_as_ringtone">Использовать как рингтон</string>
     <string name="context_menu_remove_from_playlist">Удалить из плейлиста</string>
     <string name="context_menu_change_image">Изменить изображение</string>
+    <string name="context_menu_edit_metadata">Редактировать метаданные</string>
     <string name="accessibility_play">Воспроизвести</string>
     <string name="accessibility_pause">Пауза</string>
     <string name="accessibility_next">След.</string>
@@ -173,4 +174,13 @@
     <string name="search_title_playlists">Все плейлисты «%s»</string>
     <string name="duration_format"><xliff:g id="hours">%1$s</xliff:g> <xliff:g id="minutes">%2$s</xliff:g></string>
     <string name="channel_music">Воспроизведение музыки</string>
+    <string name="metadata_tag_album">Альбом</string>
+    <string name="metadata_tag_artist">Исполнитель</string>
+    <string name="metadata_tag_title">Название</string>
+    <string name="metadata_tag_genre">Жанр</string>
+    <string name="metadata_tag_year">Год</string>
+    <string name="metadata_tag_track">Номер дорожки</string>
+    <string name="metadata_tag_comment">Комментарий</string>
+    <string name="cannot_read_metadata">Ошибка при чтении метаданных</string>
+    <string name="cannot_write_metadata">Ошибка при записи метаданных</string>
 </resources>

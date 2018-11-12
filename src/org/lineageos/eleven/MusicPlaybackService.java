@@ -56,6 +56,8 @@ import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AlbumColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.support.annotation.NonNull;
 import android.support.v4.os.BuildCompat;
 import android.text.TextUtils;
@@ -561,6 +563,8 @@ public class MusicPlaybackService extends Service {
         }
     };
 
+    private PhoneStateListener mPhoneStateListener;
+
     /**
      * {@inheritDoc}
      */
@@ -706,6 +710,10 @@ public class MusicPlaybackService extends Service {
         mAlarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         mShutdownIntent = PendingIntent.getService(this, 0, shutdownIntent, 0);
 
+        mPhoneStateListener = new MusicPhoneStateListener();
+        TelephonyManager telephonyManager = (TelephonyManager)getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+        telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+
         // Listen for the idle state
         scheduleDelayedShutdown();
 
@@ -822,6 +830,9 @@ public class MusicPlaybackService extends Service {
 
         // deinitialize shake detector
         stopShakeDetector(true);
+
+        TelephonyManager telephonyManager = (TelephonyManager)getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+        telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
     }
 
     /**
@@ -3949,6 +3960,19 @@ public class MusicPlaybackService extends Service {
         protected void onPostExecute(List<MediaSession.QueueItem> items) {
             if (!isCancelled()) {
                 mSession.setQueue(items);
+            }
+        }
+    }
+
+    private final class MusicPhoneStateListener extends PhoneStateListener {
+        @Override
+        public void onCallStateChanged(int state, String incomingNumber) {
+            super.onCallStateChanged(state, incomingNumber);
+
+            if (state == TelephonyManager.CALL_STATE_RINGING || state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                if (isPlaying()) {
+                    pause();
+                }
             }
         }
     }
