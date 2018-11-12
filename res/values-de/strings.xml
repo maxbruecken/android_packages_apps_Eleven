@@ -173,4 +173,13 @@
     <string name="search_title_playlists">Alle \"%s\" Wiedergabelisten</string>
     <string name="duration_format"><xliff:g id="hours">%1$s</xliff:g> <xliff:g id="minutes">%2$s</xliff:g></string>
     <string name="channel_music">Musikwiedergabe</string>
+    <string name="metadata_tag_album">Album</string>
+    <string name="metadata_tag_artist">Künstler</string>
+    <string name="metadata_tag_title">Titel</string>
+    <string name="metadata_tag_genre">Genre</string>
+    <string name="metadata_tag_year">Jahr</string>
+    <string name="metadata_tag_track">Stück-Nummer</string>
+    <string name="metadata_tag_comment">Kommentar</string>
+    <string name="cannot_read_metadata">Metadaten konnten nicht gelesen werden</string>
+    <string name="cannot_write_metadata">Metadaten konnten nicht aktualisiert werden</string>
 </resources>

@@ -15,7 +15,8 @@ LOCAL_STATIC_ANDROID_LIBRARIES := \
     androidx.core_core \
     androidx.legacy_legacy-support-v4 \
     androidx.palette_palette \
-    androidx.recyclerview_recyclerview
+    androidx.recyclerview_recyclerview \
+    eleven_jaudiotagger
 
 LOCAL_USE_AAPT2 := true
 
@@ -38,4 +39,8 @@ endif
 include $(BUILD_PACKAGE)
 
 include $(CLEAR_VARS)
+
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := \
+    eleven_jaudiotagger:libs/jaudiotagger-2.2.6-SNAPSHOT.jar
+
 include $(BUILD_MULTI_PREBUILT)

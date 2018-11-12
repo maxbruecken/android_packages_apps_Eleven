@@ -127,5 +127,5 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation files('libs/jaudiotagger-2.2.6-SNAPSHOT.jar')
 }
-

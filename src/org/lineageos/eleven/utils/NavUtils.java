@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import org.lineageos.eleven.Config;
 import org.lineageos.eleven.R;
+import org.lineageos.eleven.ui.activities.EditMetadataActivity;
 import org.lineageos.eleven.ui.activities.HomeActivity;
 import org.lineageos.eleven.ui.activities.SearchActivity;
 import org.lineageos.eleven.ui.activities.SettingsActivity;
@@ -180,6 +181,18 @@ public final class NavUtils {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK
                 | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(HomeActivity.EXTRA_BROWSE_PAGE_IDX, browseIndex);
+        activity.startActivity(intent);
+    }
+
+    /**
+      * Opens to {@link EditMetadataActivity}.
+      *
+      * @param activity The {@link Activity} to use.
+      * @param songId The song to edit metadata
+      */
+    public static void openMetadataEditor(final Activity activity, final long songId) {
+        final Intent intent = new Intent(activity, EditMetadataActivity.class);
+        intent.putExtra(Config.ID, songId);
         activity.startActivity(intent);
     }
 }
