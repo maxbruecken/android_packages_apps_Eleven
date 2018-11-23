@@ -171,7 +171,7 @@
         </activity>
         <!-- Edit metadata interface -->
         <activity
-            android:name="com.cyanogenmod.eleven.ui.activities.EditMetadataActivity"
+            android:name="org.lineageos.eleven.ui.activities.EditMetadataActivity"
             android:excludeFromRecents="true" />
         <!-- 4x1 App Widget -->
         <receiver
