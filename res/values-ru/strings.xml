@@ -93,6 +93,7 @@
     <string name="context_menu_use_as_ringtone">Использовать как рингтон</string>
     <string name="context_menu_remove_from_playlist">Удалить из плейлиста</string>
     <string name="context_menu_change_image">Изменить изображение</string>
+    <string name="context_menu_edit_metadata">Редактировать метаданые</string>
     <string name="accessibility_play">Воспроизвести</string>
     <string name="accessibility_pause">Пауза</string>
     <string name="accessibility_next">След.</string>
