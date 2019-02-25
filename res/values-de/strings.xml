@@ -93,6 +93,7 @@
     <string name="context_menu_use_as_ringtone">Als Klingelton verwenden</string>
     <string name="context_menu_remove_from_playlist">Aus Wiedergabeliste entfernen</string>
     <string name="context_menu_change_image">Bild ändern</string>
+    <string name="context_menu_edit_metadata">Metadaten bearbeiten</string>
     <string name="accessibility_play">Wiedergeben</string>
     <string name="accessibility_pause">Pause</string>
     <string name="accessibility_next">Weiter</string>
