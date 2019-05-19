@@ -161,6 +161,10 @@
                 <data android:mimeType="application/itunes" />
             </intent-filter>
         </activity>
+        <!-- Edit metadata interface -->
+        <activity
+            android:name="org.lineageos.eleven.ui.activities.EditMetadataActivity"
+            android:excludeFromRecents="true" />
         <!-- 4x1 App Widget -->
         <receiver
             android:name="org.lineageos.eleven.appwidgets.AppWidgetSmall"
