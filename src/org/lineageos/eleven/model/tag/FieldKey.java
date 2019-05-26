@@ -2,7 +2,7 @@ package org.lineageos.eleven.model.tag;
 
 public enum FieldKey {
 	
-	ALBUM("ALBUM"), ARTIST("ARTIST"), TITLE("TITLE"), COMMENT("COMMENT"), YEAR("YAER"), GENRE("GENRE"), TRACK("TRACK");
+	ALBUM("ALBUM"), ARTIST("ARTIST"), TITLE("TITLE"), COMMENT("COMMENT"), YEAR("YEAR"), GENRE("GENRE"), TRACK("TRACK");
 	
 	private String name;
 
