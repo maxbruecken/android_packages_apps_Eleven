@@ -1,12 +1,10 @@
 package org.lineageos.eleven.model.tag;
 
-import org.lineageos.eleven.model.tag.AudioFileWithMetadata;
-
 public class MetadataTag {
     protected AudioFileWithMetadata audioFile;
 	private FieldKey key;
     
-    public MetadataTag(AudioFileWithMetadata audioFile, FieldKey key) {
+    MetadataTag(AudioFileWithMetadata audioFile, FieldKey key) {
         this.audioFile = audioFile;
 		this.key = key;
     }

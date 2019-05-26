@@ -81,15 +81,15 @@ public class EditMetadataActivity extends Activity implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-        LabelledMetadataTag tag = (LabelledMetadataTag)mAdapter.getItem(position);
+        LabelledMetadataTag tag = mAdapter.getItem(position);
+        if (tag == null)
+        {
+            return;
+        }
 
         final EditText input = new EditText(this);
         input.setSingleLine(true);
-        try {
-			input.setText(tag.getContent());
-		} catch (MetadataException e) {
-			makeText(this, R.string.cannot_read_metadata, LENGTH_SHORT).show();
-		}
+        input.setText(tag.getContent());
         input.setInputType(input.getInputType() | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
                 | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         input.post(new Runnable() {
@@ -107,11 +107,7 @@ public class EditMetadataActivity extends Activity implements AdapterView.OnItem
                 .setView(input)
                 .setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        try {
-							mAdapter.setContent(position, input.getText().toString());
-						} catch (MetadataException e) {
-							makeText(EditMetadataActivity.this, R.string.cannot_write_metadata, LENGTH_SHORT).show();
-						}
+                        mAdapter.setContent(position, input.getText().toString());
                         closeKeyboard(input);
                         dialog.dismiss();
                     }

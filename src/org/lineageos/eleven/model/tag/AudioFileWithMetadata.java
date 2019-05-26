@@ -83,12 +83,17 @@ public class AudioFileWithMetadata {
         if (scheme.compareTo("content") == 0)
         {
             Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-            if (cursor.moveToFirst())
-            {
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                filePathUri = Uri.parse(cursor.getString(column_index));
-                return filePathUri.getPath();
-            }
+            try {
+				if (cursor.moveToFirst())
+				{
+					int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+					filePathUri = Uri.parse(cursor.getString(column_index));
+					return filePathUri.getPath();
+				}
+			}
+			finally {
+				cursor.close();
+			}
         }
         else if (scheme.compareTo("file") == 0)
         {

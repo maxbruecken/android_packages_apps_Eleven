@@ -1,12 +1,15 @@
 package org.lineageos.eleven.adapters;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.ContentUris;
 import android.database.DataSetObserver;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -20,35 +23,26 @@ import org.lineageos.eleven.model.tag.CommentTag;
 import org.lineageos.eleven.model.tag.GenreTag;
 import org.lineageos.eleven.model.tag.LabelledMetadataTag;
 import org.lineageos.eleven.model.tag.MetadataException;
+import org.lineageos.eleven.model.tag.MetadataTag;
 import org.lineageos.eleven.model.tag.TitleTag;
 import org.lineageos.eleven.model.tag.TrackTag;
 import org.lineageos.eleven.model.tag.YearTag;
 
+import static android.widget.Toast.LENGTH_SHORT;
+import static android.widget.Toast.makeText;
+
 public class TagAdapter extends ArrayAdapter<LabelledMetadataTag> {
 
-    private static final int TAG_COUNT = 7;
-    private Uri uri;
     private AudioFileWithMetadata audioFile;
     private Activity context;
-    private LabelledMetadataTag[] data = new LabelledMetadataTag[TAG_COUNT];
 
     public TagAdapter(Activity context, long songId) {
         super(context, 0);
         
         this.context = context;
-        this.uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
+        Uri uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
 		this.audioFile = new AudioFileWithMetadata(context, uri);
-		setData();
-    }
-
-    private void setData() {
-        data[0] = new LabelledMetadataTag(context.getString(R.string.metadata_tag_title), new TitleTag(context, audioFile));
-        data[1] = new LabelledMetadataTag(context.getString(R.string.metadata_tag_artist), new ArtistTag(context, audioFile));
-        data[2] = new LabelledMetadataTag(context.getString(R.string.metadata_tag_album), new AlbumTag(context, audioFile));
-        data[3] = new LabelledMetadataTag(context.getString(R.string.metadata_tag_genre), new GenreTag(context, audioFile));
-        data[4] = new LabelledMetadataTag(context.getString(R.string.metadata_tag_year), new YearTag(context, audioFile));
-        data[5] = new LabelledMetadataTag(context.getString(R.string.metadata_tag_track), new TrackTag(context, audioFile));
-        data[6] = new LabelledMetadataTag(context.getString(R.string.metadata_tag_comment), new CommentTag(context, audioFile));
+        new ReadData().execute(audioFile);
     }
 
     @Override
@@ -61,35 +55,8 @@ public class TagAdapter extends ArrayAdapter<LabelledMetadataTag> {
         return true;
     }
 
-    @Override
-    public void registerDataSetObserver(DataSetObserver observer) {
-
-    }
-
-    @Override
-    public void unregisterDataSetObserver(DataSetObserver observer) {
-
-    }
-
-    @Override
-    public int getCount() {
-        return TAG_COUNT;
-    }
-
-    @Override
-    public LabelledMetadataTag getItem(int position) {
-        return data[position];
-    }
-
-    public void setContent(final int position, String content) throws MetadataException {
-        data[position].setContent(content);
-
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
+    public void setContent(final int position, String content) {
+        new SaveData().execute(getItem(position), content);
     }
 
     @Override
@@ -98,7 +65,7 @@ public class TagAdapter extends ArrayAdapter<LabelledMetadataTag> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public @NonNull View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View v;
         if (convertView == null) {
             v = context.getLayoutInflater().inflate(R.layout.list_item_tag, parent, false);
@@ -106,13 +73,17 @@ public class TagAdapter extends ArrayAdapter<LabelledMetadataTag> {
             v = convertView;
         }
 
-        WeakReference<TextView> label = new WeakReference<TextView>((TextView)v.findViewById(R.id.tag_label));
-        WeakReference<TextView> content = new WeakReference<TextView>((TextView)v.findViewById(R.id.tag_content));
+        WeakReference<TextView> label = new WeakReference<TextView>(v.findViewById(R.id.tag_label));
+        WeakReference<TextView> content = new WeakReference<TextView>(v.findViewById(R.id.tag_content));
 
         LabelledMetadataTag tag = getItem(position);
 
+        if (tag == null) {
+            return v;
+        }
+
         label.get().setText(tag.getLabel());
-        content.get().setText(tag.toString());
+        content.get().setText(tag.getContent());
 
         return v;
     }
@@ -120,5 +91,68 @@ public class TagAdapter extends ArrayAdapter<LabelledMetadataTag> {
     @Override
     public boolean isEmpty() {
         return audioFile == null;
+    }
+
+    private class ReadData extends AsyncTask<AudioFileWithMetadata, Void, ArrayList<LabelledMetadataTag>>
+    {
+        @Override
+        protected ArrayList<LabelledMetadataTag> doInBackground(AudioFileWithMetadata... audioFiles) {
+            ArrayList<LabelledMetadataTag> data = new ArrayList<>();
+            addTag(data, context.getString(R.string.metadata_tag_title), new TitleTag(context, audioFile));
+            addTag(data, context.getString(R.string.metadata_tag_artist), new ArtistTag(context, audioFile));
+            addTag(data, context.getString(R.string.metadata_tag_album), new AlbumTag(context, audioFile));
+            addTag(data, context.getString(R.string.metadata_tag_genre), new GenreTag(context, audioFile));
+            addTag(data, context.getString(R.string.metadata_tag_year), new YearTag(context, audioFile));
+            addTag(data, context.getString(R.string.metadata_tag_track), new TrackTag(context, audioFile));
+            addTag(data, context.getString(R.string.metadata_tag_comment), new CommentTag(context, audioFile));
+            return data;
+        }
+
+        private void addTag(ArrayList<LabelledMetadataTag> data, String label, MetadataTag underlyingTag) {
+            try {
+                LabelledMetadataTag tag = new LabelledMetadataTag(label,
+                        underlyingTag);
+                data.add(tag);
+            }
+            catch (MetadataException ex) {
+            }
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<LabelledMetadataTag> tags) {
+            super.onPostExecute(tags);
+            TagAdapter.this.clear();
+            TagAdapter.this.addAll(tags);
+            TagAdapter.this.notifyDataSetChanged();
+        }
+    }
+
+    private class SaveData extends AsyncTask<Object, Void, Boolean>
+    {
+        @Override
+        protected Boolean doInBackground(Object... params) {
+            try
+            {
+                ((LabelledMetadataTag)params[0]).setContent((String)params[1]);
+                return true;
+            }
+            catch (MetadataException ex)
+            {
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            if (result)
+            {
+                TagAdapter.this.notifyDataSetChanged();
+            }
+            else
+            {
+                makeText(context, R.string.cannot_write_metadata, LENGTH_SHORT).show();
+            }
+        }
     }
 }
