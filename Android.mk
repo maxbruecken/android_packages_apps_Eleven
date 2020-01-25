@@ -9,6 +9,8 @@ LOCAL_SRC_FILES += $(call all-java-files-under, src_aosp)
 
 LOCAL_RESOURCE_DIR := $(addprefix $(LOCAL_PATH)/, res)
 
+LOCAL_STATIC_JAVA_LIBRARIES := eleven_jaudiotagger
+    
 LOCAL_STATIC_ANDROID_LIBRARIES := \
     androidx.appcompat_appcompat \
     androidx.cardview_cardview \
